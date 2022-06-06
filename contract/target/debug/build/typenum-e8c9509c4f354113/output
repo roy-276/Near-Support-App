@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/home/maingi_kinoti/bot/contract/target/debug/build/typenum-e8c9509c4f354113/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/home/maingi_kinoti/bot/contract/target/debug/build/typenum-e8c9509c4f354113/out/op.rs
