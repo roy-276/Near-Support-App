@@ -1,4 +1,4 @@
-bot
+Near Support App
 ==================
 
 This [React] app was initialized with [create-near-app]
