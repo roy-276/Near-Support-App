@@ -96,7 +96,7 @@ mod tests {
         }
     }
 
-    // Individual unit test with #[test] registered and fired
+    // Individual unit tests with #[test] registered and fired
     #[test]
 
     fn deposit_test() {
@@ -133,7 +133,7 @@ mod tests {
         assert_eq!(contract.get_balance("12345".to_string()), ntoy(4));
     }
     // ntoy(4)
-    // convet near to yocto
+    // convert near to yocto
     fn ntoy(near_amount: u128) -> u128 {
         near_amount * 10u128.pow(24)
     }
