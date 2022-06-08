@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 // To conserve gas, efficient serialization is achieved through Borsh (http://borsh.io/)
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{env, near_bindgen, setup_alloc};
+use near_sdk::{env, json_types::U128, near_bindgen, setup_alloc, AccountId, Promise};
 
 setup_alloc!();
 
@@ -45,17 +45,28 @@ impl Support {
         }
     }
 
-    pub fn send_gift(&mut self, youtube_user_id: String, amount: u128) {
+    #[payable]
+    pub fn send_gift(&mut self, youtube_user_id: AccountId, token: U128) -> Promise {
         let account_id = env::predecessor_account_id();
         let deposit: u128 = env::attached_deposit();
+        let amount = u128::from(token);
+        let deposited_amount = self.get_deposit(account_id.clone());
 
-        assert!(amount <= deposit, "Amount not enough for the transaction");
+        if deposited_amount < amount {
+            assert!(amount <= deposit, "Amount not enough for the transaction");
+            self.deposits
+                .insert(account_id.clone(), deposit - amount.clone());
 
-        self.deposits
-            .insert(account_id.clone(), deposit - amount.clone());
+            return Promise::new(youtube_user_id).transfer(token.0);
+        } else {
+            self.deposits
+                .insert(account_id.clone(), deposited_amount - amount.clone());
 
-        let balance: u128 = self.get_balance(youtube_user_id.clone());
-        self.gift.insert(youtube_user_id, balance + amount);
+            let balance: u128 = self.get_balance(youtube_user_id.clone());
+            self.gift.insert(youtube_user_id.clone(), balance + amount);
+
+            Promise::new(youtube_user_id).transfer(token.0)
+        }
     }
 
     pub fn get_balance(&self, youtube_user_id: String) -> u128 {
@@ -96,7 +107,7 @@ mod tests {
         }
     }
 
-    // Individual unit test with #[test] registered and fired
+    // Individual unit tests with #[test] registered and fired
     #[test]
 
     fn deposit_test() {
@@ -128,12 +139,12 @@ mod tests {
 
         contract.deposit();
 
-        contract.send_gift("12345".to_string(), ntoy(4));
+        contract.send_gift("12345".to_string(), U128::from(ntoy(4)));
 
         assert_eq!(contract.get_balance("12345".to_string()), ntoy(4));
     }
     // ntoy(4)
-    // convet near to yocto
+    // convert near to yocto
     fn ntoy(near_amount: u128) -> u128 {
         near_amount * 10u128.pow(24)
     }
