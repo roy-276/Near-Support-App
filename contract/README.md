@@ -110,6 +110,7 @@ The imports for unit tests
 part of writing unit tests is setting up a mock context for testing.\
 Near_sdk's `VMContext` is used to simulate a user interaction with the smart contract.
 more info on VMContext [here](https://www.near-sdk.io/testing/unit-tests)\
+
     fn get_context(input: Vec<u8>, is_view: bool) -> VMContext {
         VMContext {
             ...// Implementation here...
