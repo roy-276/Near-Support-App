@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 # Near Support App
-=======
-Near Support App
-==================
->>>>>>> 255bc0895c0307844d07c060ae0a729f51da75fa
 
 This [React] app was initialized with [create-near-app]
 
