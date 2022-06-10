@@ -2,12 +2,7 @@ use std::collections::HashMap;
 
 // To conserve gas, efficient serialization is achieved through Borsh (http://borsh.io/)
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-<<<<<<< HEAD
 use near_sdk::{env, json_types::U128, near_bindgen, setup_alloc, AccountId, Promise};
-=======
-use near_sdk::{env, near_bindgen, setup_alloc,AccountId, Promise, json_types::U128};
->>>>>>> 255bc0895c0307844d07c060ae0a729f51da75fa
-
 setup_alloc!();
 
 // Note: the names of the structs are not important when calling the smart contract, but the function names are
@@ -61,7 +56,6 @@ impl Support {
             self.deposits
                 .insert(account_id.clone(), deposit - amount.clone());
 
-<<<<<<< HEAD
             return Promise::new(youtube_user_id).transfer(token.0);
         } else {
             self.deposits
@@ -70,19 +64,8 @@ impl Support {
             let balance: u128 = self.get_balance(youtube_user_id.clone());
             self.gift.insert(youtube_user_id.clone(), balance + amount);
 
-=======
             return Promise::new(youtube_user_id).transfer(token.0)
-            
-        } else {
-
-            self.deposits
-                .insert(account_id.clone(), deposited_amount - amount.clone());
-                
-            let balance: u128 = self.get_balance(youtube_user_id.clone());
-            self.gift.insert(youtube_user_id.clone(), balance + amount);
-            
->>>>>>> 255bc0895c0307844d07c060ae0a729f51da75fa
-            Promise::new(youtube_user_id).transfer(token.0)
+        
         }
     }
 
@@ -92,7 +75,7 @@ impl Support {
             None => 0,
         }
     }
-
+    
 }
 
 // Use the attribute below for unit tests
