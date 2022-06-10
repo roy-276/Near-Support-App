@@ -160,7 +160,6 @@ Here we are sending a gift of 10 NEAR to an account by id '12345' and checkinf i
         assert_eq!(contract.get_balance("12345".to_string()), ntoy(4));
     }
 
-Bot Smart Contract
 A [smart contract] written in [Rust] for an app initialized with [create-near-app]
 
 [smart contract]: https://docs.near.org/docs/develop/contracts/overview
