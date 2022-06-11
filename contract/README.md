@@ -107,7 +107,7 @@ The imports for unit tests
         use near_sdk::MockedBlockchain;
         use near_sdk::{testing_env, VMContext};
 
-part of writing unit tests is setting up a mock context for testing.\
+Part of writing unit tests is setting up a mock context for testing.\
 Near_sdk's `VMContext` is used to simulate a user interaction with the smart contract.
 more info on VMContext [here](https://www.near-sdk.io/testing/unit-tests)\
 
@@ -147,7 +147,7 @@ Here we are sending a gift of 10 NEAR to an account by id '12345' and checkinf i
 
 
     #[test]
-    fn set_gift_test() {
+    fn send_gift_test() {
         let mut context = get_context(vec![], false);
         context.attached_deposit = ntoy(10);
         context.is_view = false;
