@@ -1,14 +1,14 @@
 
 # Near Support App
 
-This smart contract is build with the aim of supporting content creators around the world. We help people show their support by providing them with a easy and secure way to send funds in NEAR to their favorite musicians or youtubers.\
+This smart contract is build with the aim of supporting content creators around the world. It helps people show their support by providing them with a easy and secure way to send tokens in NEAR to their content creators.\
 NEAR protocol provides all the neccesary features for this purpose.
 
 ## How it works
 
 ### Imports
 
-Here we import all the neccesary dependencies needed.\
+Import all the neccesary dependencies needed.\
 Since the transfer method takes a number in yoctoNEAR, it's likely to need numbers much larger than 2^53, therefore json_types is used.\
 To conserve gas, efficient serialization is achieved through Borsh (http://borsh.io/)
 
@@ -26,7 +26,7 @@ Support State is declared here.
         gift: HashMap<String, u128>,
     }
 
-We initialize the default support state using the Default keyword.
+I initialize the default support state using the Default keyword.
 
     impl Default for Support {
         fn default() -> Self {
@@ -34,15 +34,15 @@ We initialize the default support state using the Default keyword.
         }
     }
 
-Here we define all the implementations and methods that will be available on the Support object. 
+Here I define all the implementations and methods that will be available on the Support object. 
 
     #[near_bindgen]
     impl Support {
         ...// Implementation here...
     }
 
-The deposit method allows the fans to deposit a certain amount that they would wish to use in their support quest.\
-The data is stored in a hashmap with the fan's account_id as the key and the deposit as the value. 
+The deposit method allows the client to deposit NEAR tokens that they would wish to use in their support quest.\
+The data is stored in a hashmap with the client's account_id as the key and the deposit as the value. 
 
     #[payable]
     pub fn deposit(&mut self) {
@@ -52,7 +52,7 @@ The data is stored in a hashmap with the fan's account_id as the key and the dep
         self.deposits.insert(account_id, previous_deposit + deposit);
     }
 
-`get_deposit()` method allows the client to view the deposited amount if any remaining on his account.
+`get_deposit()` method allows the client to view the deposited NEAR tokens on their account.
 
     pub fn get_deposit(&self, account_id: String) -> u128 {
         match self.deposits.get(&account_id) {
@@ -61,11 +61,11 @@ The data is stored in a hashmap with the fan's account_id as the key and the dep
         }
     }
 
-`send_gift()` implementation can be called with or without a deposit thus payable function.\
+`send_gift()` implementation can be called with or without a deposit thus payable method.\
 json_types U128 is used incase the amount transfered is larger than 2^53.\
 The type of account passed to the function is also checked to confirm it's a valid NEAR AccountId.\
-If the client has sufficient `self.deposit` it will be used for the transaction and the `self.deposit` value be subtracted by the amount sent.
-If the client does not have sufficient `self.deposit`or no deposit the amount will be charged from the attached_deposit if any and the remaining amount be added to the client's `self.deposit` value on the HashMap.\
+If the client has sufficient NEAR tokens that will be used for the transaction.
+If the client does not have sufficient NEAR tokens, it will be charged from the attached_deposit and the remaining tokens be updated on the HashMap.\
 Near_sdk's Promise method is used to make the transactions.
 
     #[payable]
@@ -79,16 +79,21 @@ Near_sdk's Promise method is used to make the transactions.
             assert!(amount <= deposit, "Amount not enough for the transaction");
             self.deposits
                 .insert(account_id.clone(), deposit - amount.clone());
+
+            return Promise::new(youtube_user_id).transfer(token.0);
+        } else {
+            self.deposits
+                .insert(account_id.clone(), deposited_amount - amount.clone());
+
+            let balance: u128 = self.get_balance(youtube_user_id.clone());
+            self.gift.insert(youtube_user_id.clone(), balance + amount);
+
+            return Promise::new(youtube_user_id).transfer(token.0)
+        
         }
-        self.deposits
-            .insert(account_id.clone(), deposited_amount - amount.clone());
-
-        let balance: u128 = self.get_balance(youtube_user_id.clone());
-        self.gift.insert(youtube_user_id.clone(), balance + amount);
-        Promise::new(youtube_user_id).transfer(token.0)
     }
-
-The `get_balance()` method allows the user to get the amount gifted to a specific on our smart contract.
+    
+The `get_balance()` method allows the content creator to view the tokens gifted to their accounts.
 
     pub fn get_balance(&self, youtube_user_id: String) -> u128 {
         match self.gift.get(&youtube_user_id) {
@@ -109,7 +114,7 @@ The imports for unit tests
 
 Part of writing unit tests is setting up a mock context for testing.\
 Near_sdk's `VMContext` is used to simulate a user interaction with the smart contract.
-more info on VMContext [here](https://www.near-sdk.io/testing/unit-tests)\
+More info on VMContext [here](https://www.near-sdk.io/testing/unit-tests)
 
     fn get_context(input: Vec<u8>, is_view: bool) -> VMContext {
         VMContext {
@@ -117,7 +122,7 @@ more info on VMContext [here](https://www.near-sdk.io/testing/unit-tests)\
         }
     }
 
-We are also using the function `ntoy()` to convert yocto to NEAR.
+I am also using the function `ntoy()` to convert yocto to NEAR.
 
     fn ntoy(near_amount: u128) -> u128 {
             near_amount * 10u128.pow(24)
@@ -125,7 +130,7 @@ We are also using the function `ntoy()` to convert yocto to NEAR.
 
 Individual unit tests with #[test] registered and fired.\
 Tests for the `deposit()` method using the mock context as the testing environment.\
-Here we try to make a deposit with an attached_deposit of 10 near and asserting that the account was added to the deposits HashMap with the right value.
+Here I try to make a deposit with an attached_deposit of 10 near and asserting that the account was added to the deposits HashMap with the right value.
 
     #[test]
     fn deposit_test() {
@@ -143,7 +148,7 @@ Here we try to make a deposit with an attached_deposit of 10 near and asserting 
     }
 
 Test for the `send_gift()` method using the mock context as the testing environment.\
-Here we are sending a gift of 10 NEAR to an account by id '12345' and checkinf if the account recieved it using the `get_balance()` method.
+Here I am sending a gift of 10 NEAR to an account by id '12345' and check if the account recieved it using the `get_balance()` method.
 
 
     #[test]
