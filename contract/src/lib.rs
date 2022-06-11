@@ -129,7 +129,7 @@ mod tests {
     }
 
     #[test]
-    fn set_gift_test() {
+    fn send_gift_test() {
         // set up the mock context into the testing environment
         let mut context = get_context(vec![], false);
         context.attached_deposit = ntoy(10);
