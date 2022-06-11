@@ -9,7 +9,7 @@ setup_alloc!();
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
 
-// Support State
+// Support State        
 pub struct Support {
     deposits: HashMap<String, u128>,
     gift: HashMap<String, u128>,
@@ -35,7 +35,7 @@ impl Support {
         let previous_deposit: u128 = self.get_deposit(account_id.clone());
 
         self.deposits.insert(account_id, previous_deposit + deposit);
-    }
+    } 
 
     pub fn get_deposit(&self, account_id: String) -> u128 {
         match self.deposits.get(&account_id) {
@@ -129,7 +129,7 @@ mod tests {
     }
 
     #[test]
-    fn set_gift_test() {
+    fn send_gift_test() {
         // set up the mock context into the testing environment
         let mut context = get_context(vec![], false);
         context.attached_deposit = ntoy(10);
