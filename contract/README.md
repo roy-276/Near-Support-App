@@ -34,7 +34,7 @@ We initialize the default support state using the Default keyword.
         }
     }
 
-Here we define all the implimentations and methods that will be available on the Support object. 
+Here we define all the implementations and methods that will be available on the Support object. 
 
     #[near_bindgen]
     impl Support {
@@ -61,7 +61,7 @@ The data is stored in a hashmap with the fan's account_id as the key and the dep
         }
     }
 
-`send_gift()` implimentation can be called with or without a deposit thus payable function.\ 
+`send_gift()` implementation can be called with or without a deposit thus payable function.\ 
 json_types U128 is used incase the amount transfered is larger than 2^53.
 The type of account passed to the function is also checked to confirm it's a valid NEAR AccountId.\
 If the client has sufficient `self.deposit` it will be used for the transaction and the `self.deposit` value be subtracted by the amount sent.
