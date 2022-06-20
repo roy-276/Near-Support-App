@@ -1,8 +1,8 @@
 
 # Near Support App
 
-This smart contract is build with the aim of supporting content creators around the world. It helps people show their support by providing them with a easy and secure way to send tokens in NEAR to their content creators.\
-NEAR protocol provides all the neccesary features for this purpose.
+This smart contract was created with the intention of assisting content creators all over the world. It allows people to show their support by providing an easy and secure way to send NEAR tokens to content creators.
+The NEAR protocol includes all of the features required for this purpose.
 
 ## How it works
 
